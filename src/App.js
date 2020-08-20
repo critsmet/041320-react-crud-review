@@ -8,6 +8,7 @@ import ToyHeader from './ToyHeader'
 export default class App extends React.Component {
 
   state = {
+    page: "toys",
     toys: []
   }
 
@@ -17,33 +18,58 @@ export default class App extends React.Component {
       .then(toysArray => this.setState({toys: toysArray}))
   }
 
-  addLike = (e) => {
-    let toyId = e.target.dataset.toyid
-    let toy = this.state.toys.find(toy => toy.id === parseInt(toyId))
+  addLike = (toyId) => {
 
-    fetch(`http://localhost:3000/toys/${toyId}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accepts': 'application/json'
-      },
-      body: JSON.stringify({"likes": toy.likes + 1})
-    })
+    function addLikeToToy(toyObj){
+      return toyObj.id === toyId ? {...toyObj, likes: toyObj.likes + 1} : toyObj
+    }
 
-    //optimistic rendering
-    this.setState(prevState => ({toys: prevState.toys.map(toyObj => toyObj.id === parseInt(toyId) ? {...toyObj, likes: toyObj.likes + 1} : toyObj)}), () => console.log(this.state))
+    function makeNewState(prevState){
+      return {toys: prevState.toys.map(addLikeToToy)}
+    }
+
+    this.setState(makeNewState)
+
   }
 
   addNewToy = (obj) => {
     this.setState(prevState => ({toys: [...prevState.toys, obj]}))
   }
 
+  deleteToy = (toyId) => {
+
+    function removeToy(toyObj){
+      return toyObj.id !== toyId
+    }
+
+    function makeNewStateWithoutToy(prevState){
+      return {toys: prevState.toys.filter(removeToy)}
+    }
+    //return the toys array WITHOUT the toy that we want to delete
+    this.setState(makeNewStateWithoutToy)
+
+    //this.setState(whatEverYouWant => ({toys: whatEverYouWant.toys.filter(toyObj => toyObj.id !== toyId)}))
+  }
+
+  changePage = () => {
+    this.setState(prevState => ({page: prevState.page === "toys" ? "form" : "toys"}))
+  }
+
+  // setState = (arg) => {
+  //   //context
+  //   if (arg.isAnOBject?){
+  //     //combine this object with the current version of state
+  //   } else {
+  //     arg(prevState)
+  //   }
+  // }
+
   render(){
     return (
       <div className="App">
         <ToyHeader />
-        <Form addNewToy={this.addNewToy}/>
-        <ToysContainer toys={this.state.toys} addLike={this.addLike}/>
+        <button onClick={this.changePage}>{this.state.page === "toys" ? 'View Form' : 'View Toys'}</button>
+        {this.state.page === "toys" ? <ToysContainer toys={this.state.toys} deleteToy={this.deleteToy} addLike={this.addLike}/> : <Form addNewToy={this.addNewToy}/> }
       </div>
     )
   }

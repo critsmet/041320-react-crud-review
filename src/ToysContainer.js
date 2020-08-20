@@ -9,7 +9,7 @@ export default class ToysContainer extends React.Component {
     console.log("Toy container rendering!");
     return(
       <div id="toy-container">
-        {this.props.toys.map(toyObj => <ToyCard key={toyObj.name} id={toyObj.id} name={toyObj.name} img={toyObj.image} likes={toyObj.likes} addLike={this.props.addLike}/>)}
+        {this.props.toys.map(toyObj => <ToyCard key={toyObj.name} id={toyObj.id} name={toyObj.name} img={toyObj.image} likes={toyObj.likes} deleteToy={this.props.deleteToy} addLike={this.props.addLike}/>)}
       </div>
     )
   }

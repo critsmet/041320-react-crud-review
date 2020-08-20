@@ -10,7 +10,7 @@ export default class Form extends React.Component {
   handleInput = (e) => {
     let value = e.target.value
     let inputName = e.target.name
-    this.setState({[e.target.name]: e.target.value})
+    this.setState({[inputName]: value})
   }
 
   makeNewToy = () => {
