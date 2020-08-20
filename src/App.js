@@ -1,9 +1,11 @@
 import React from 'react';
 import './App.css';
+import { Route, Switch } from 'react-router-dom'
 
 import ToysContainer from './ToysContainer'
 import Form from './Form'
 import ToyHeader from './ToyHeader'
+import ToyShow from './ToyShow'
 
 export default class App extends React.Component {
 
@@ -64,13 +66,33 @@ export default class App extends React.Component {
   //   }
   // }
 
+  //<button onClick={this.changePage}>{this.state.page === "toys" ? 'View Form' : 'View Toys'}</button>
   render(){
     return (
       <div className="App">
         <ToyHeader />
-        <button onClick={this.changePage}>{this.state.page === "toys" ? 'View Form' : 'View Toys'}</button>
-        {this.state.page === "toys" ? <ToysContainer toys={this.state.toys} deleteToy={this.deleteToy} addLike={this.addLike}/> : <Form addNewToy={this.addNewToy}/> }
+        <Route exact path="/home">
+          <div>Welcome to Toytale</div>
+        </Route>
+        <Route exact path="/toys" render={() =><ToysContainer toys={this.state.toys} deleteToy={this.deleteToy} addLike={this.addLike}/>} />
+        <Route exact path="/toys/:id" render={(routerProps) => <ToyShow {...routerProps} allToys={this.state.toys} />} />
+        <Route exact path="/form" render={(routerProps) => <Form {...routerProps} addNewToy={this.addNewToy}/>}/>
       </div>
     )
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//

@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 export default class ToyCard extends React.PureComponent {
 
@@ -46,7 +47,7 @@ export default class ToyCard extends React.PureComponent {
     console.log("Rendering component for " + this.props.id);
     return (
       <div className="card">
-        <h2>{this.props.name}</h2>
+        <Link to={`/toys/${this.props.id}`}><h2>{this.props.name}</h2></Link>
         <img alt={this.props.name} src={this.props.img} className="toy-avatar"/>
         <p>{this.props.likes} Likes </p>
         <button data-toyid={this.props.id} onClick={this.handleLike} className="like-btn">Like &lt;3</button>

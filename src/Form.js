@@ -23,10 +23,14 @@ export default class Form extends React.Component {
       body: JSON.stringify({...this.state, likes: 0})
     })
     .then(res => res.json())
-    .then(this.props.addNewToy)
+    .then((res) => {
+      this.props.addNewToy(res)
+      this.props.history.push('/toys')
+    })
   }
 
   render(){
+    console.log(this.props)
     return (
       <div id="form">
           <label>Name</label>
