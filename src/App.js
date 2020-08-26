@@ -10,7 +10,6 @@ import ToyShow from './ToyShow'
 export default class App extends React.Component {
 
   state = {
-    page: "toys",
     toys: []
   }
 
@@ -52,11 +51,6 @@ export default class App extends React.Component {
 
     //this.setState(whatEverYouWant => ({toys: whatEverYouWant.toys.filter(toyObj => toyObj.id !== toyId)}))
   }
-
-  changePage = () => {
-    this.setState(prevState => ({page: prevState.page === "toys" ? "form" : "toys"}))
-  }
-
   // setState = (arg) => {
   //   //context
   //   if (arg.isAnOBject?){
@@ -71,12 +65,14 @@ export default class App extends React.Component {
     return (
       <div className="App">
         <ToyHeader />
-        <Route exact path="/home">
-          <div>Welcome to Toytale</div>
-        </Route>
-        <Route exact path="/toys" render={() =><ToysContainer toys={this.state.toys} deleteToy={this.deleteToy} addLike={this.addLike}/>} />
-        <Route exact path="/toys/:id" render={(routerProps) => <ToyShow {...routerProps} allToys={this.state.toys} />} />
-        <Route exact path="/form" render={(routerProps) => <Form {...routerProps} addNewToy={this.addNewToy}/>}/>
+        <Switch>
+          <Route exact path="/toys" render={() =><ToysContainer toys={this.state.toys} deleteToy={this.deleteToy} addLike={this.addLike}/>} />
+          <Route path="/toys/:id" render={(routerProps) => <ToyShow {...routerProps} allToys={this.state.toys} />} />
+          <Route path="/form" render={(routerProps) => <Form {...routerProps} addNewToy={this.addNewToy}/>}/>
+          <Route path="/home">
+            <div>Welcome to Toytale</div>
+          </Route>
+        </Switch>
       </div>
     )
   }
